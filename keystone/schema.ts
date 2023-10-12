@@ -33,6 +33,7 @@ import { Curriculum } from "./schemas/Curriculum";
 import { Lesson } from "./schemas/Lesson";
 import { Tag } from "./schemas/Tag";
 import { Assignment } from "./schemas/Assignment";
+import { Resource } from "./schemas/Resource";
 import { Homework } from "./schemas/Homework";
 
 // see https://keystonejs.com/docs/fields/overview for the full list of fields
@@ -79,5 +80,6 @@ export const lists: Lists = {
   Lesson,
   Tag,
   Assignment,
+  Resource,
   Homework,
 };

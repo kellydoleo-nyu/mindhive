@@ -30,7 +30,7 @@ __export(keystone_exports, {
 });
 module.exports = __toCommonJS(keystone_exports);
 var import_config = require("dotenv/config");
-var import_core27 = require("@keystone-6/core");
+var import_core28 = require("@keystone-6/core");
 
 // mutations/index.ts
 var import_schema = require("@graphql-tools/schema");
@@ -54,7 +54,7 @@ async function sendPasswordResetEmail(resetToken, to) {
     MessageStream: "ps-stream"
   });
 }
-async function sendNotificationEmail(to, subject, text27) {
+async function sendNotificationEmail(to, subject, text28) {
   const info = await client.sendEmailWithTemplate({
     From: "no-reply@prettyspecial.one",
     To: to,
@@ -65,7 +65,7 @@ async function sendNotificationEmail(to, subject, text27) {
       company_name: "MindHive",
       company_address: "New York",
       support_url: `${process.env.FRONTEND_URL}/menu/docs/about`,
-      text: text27
+      text: text28
     },
     MessageStream: "ps-stream"
   });
@@ -544,6 +544,10 @@ var Profile = (0, import_core.list)({
       ref: "Assignment.author",
       many: true
     }),
+    authorOfResource: (0, import_fields.relationship)({
+      ref: "Resource.author",
+      many: true
+    }),
     authorOfHomework: (0, import_fields.relationship)({
       ref: "Homework.author",
       many: true
@@ -675,6 +679,10 @@ var Class = (0, import_core4.list)({
     }),
     assignments: (0, import_fields6.relationship)({
       ref: "Assignment.classes",
+      many: true
+    }),
+    resources: (0, import_fields6.relationship)({
+      ref: "Resource.classes",
       many: true
     })
   }
@@ -1774,6 +1782,10 @@ var Tag = (0, import_core24.list)({
       ref: "Assignment.tags",
       many: true
     }),
+    resources: (0, import_fields26.relationship)({
+      ref: "Resource.tags",
+      many: true
+    }),
     homeworks: (0, import_fields26.relationship)({
       ref: "Homework.tags",
       many: true
@@ -1863,11 +1875,11 @@ var Assignment = (0, import_core25.list)({
   }
 });
 
-// schemas/Homework.ts
+// schemas/Resource.ts
 var import_core26 = require("@keystone-6/core");
 var import_fields28 = require("@keystone-6/core/fields");
 var import_uniqid4 = __toESM(require("uniqid"));
-var Homework = (0, import_core26.list)({
+var Resource = (0, import_core26.list)({
   access: {
     operation: {
       query: () => true,
@@ -1894,6 +1906,72 @@ var Homework = (0, import_core26.list)({
       }
     }),
     author: (0, import_fields28.relationship)({
+      ref: "Profile.authorOfResource",
+      hooks: {
+        async resolveInput({ context, operation, inputData }) {
+          if (operation === "create") {
+            return { connect: { id: context.session.itemId } };
+          } else {
+            return inputData.author;
+          }
+        }
+      }
+    }),
+    classes: (0, import_fields28.relationship)({
+      ref: "Class.resources",
+      many: true
+    }),
+    homework: (0, import_fields28.relationship)({
+      ref: "Homework.resources",
+      many: true
+    }),
+    title: (0, import_fields28.text)({ validation: { isRequired: true } }),
+    content: (0, import_fields28.text)(),
+    settings: (0, import_fields28.json)(),
+    public: (0, import_fields28.checkbox)({ isFilterable: true }),
+    isTemplate: (0, import_fields28.checkbox)({ isFilterable: true }),
+    tags: (0, import_fields28.relationship)({
+      ref: "Tag.resources",
+      many: true
+    }),
+    createdAt: (0, import_fields28.timestamp)({
+      defaultValue: { kind: "now" }
+    }),
+    updatedAt: (0, import_fields28.timestamp)()
+  }
+});
+
+// schemas/Homework.ts
+var import_core27 = require("@keystone-6/core");
+var import_fields29 = require("@keystone-6/core/fields");
+var import_uniqid5 = __toESM(require("uniqid"));
+var Homework = (0, import_core27.list)({
+  access: {
+    operation: {
+      query: () => true,
+      create: () => true,
+      update: () => true,
+      delete: () => true
+    }
+  },
+  fields: {
+    code: (0, import_fields29.text)({
+      isIndexed: "unique",
+      isFilterable: true,
+      access: {
+        read: () => true,
+        create: () => true,
+        update: () => true
+      },
+      hooks: {
+        async resolveInput({ operation }) {
+          if (operation === "create") {
+            return (0, import_uniqid5.default)();
+          }
+        }
+      }
+    }),
+    author: (0, import_fields29.relationship)({
       ref: "Profile.authorOfHomework",
       hooks: {
         async resolveInput({ context, operation, inputData }) {
@@ -1905,21 +1983,24 @@ var Homework = (0, import_core26.list)({
         }
       }
     }),
-    assignment: (0, import_fields28.relationship)({
+    assignment: (0, import_fields29.relationship)({
       ref: "Assignment.homework"
     }),
-    title: (0, import_fields28.text)({ validation: { isRequired: true } }),
-    content: (0, import_fields28.text)(),
-    settings: (0, import_fields28.json)(),
-    public: (0, import_fields28.checkbox)({ isFilterable: true }),
-    tags: (0, import_fields28.relationship)({
+    resources: (0, import_fields29.relationship)({
+      ref: "Resource.homework"
+    }),
+    title: (0, import_fields29.text)({ validation: { isRequired: true } }),
+    content: (0, import_fields29.text)(),
+    settings: (0, import_fields29.json)(),
+    public: (0, import_fields29.checkbox)({ isFilterable: true }),
+    tags: (0, import_fields29.relationship)({
       ref: "Tag.homeworks",
       many: true
     }),
-    createdAt: (0, import_fields28.timestamp)({
+    createdAt: (0, import_fields29.timestamp)({
       defaultValue: { kind: "now" }
     }),
-    updatedAt: (0, import_fields28.timestamp)()
+    updatedAt: (0, import_fields29.timestamp)()
   },
   graphql: {
     plural: "homeworks"
@@ -1953,6 +2034,7 @@ var lists = {
   Lesson,
   Tag,
   Assignment,
+  Resource,
   Homework
 };
 
@@ -1986,7 +2068,7 @@ var session = (0, import_session.statelessSessions)({
 
 // keystone.ts
 var keystone_default = withAuth(
-  (0, import_core27.config)({
+  (0, import_core28.config)({
     server: {
       cors: {
         origin: [

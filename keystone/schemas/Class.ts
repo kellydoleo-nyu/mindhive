@@ -57,5 +57,9 @@ export const Class = list({
       ref: "Assignment.classes",
       many: true,
     }),
+    resources: relationship({
+      ref: "Resource.classes",
+      many: true,
+    }),
   },
 });

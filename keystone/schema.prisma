@@ -62,6 +62,7 @@ model Profile {
   authorOfCurriculum       Curriculum[]    @relation("Curriculum_author")
   collaboratorInCurriculum Curriculum[]    @relation("Curriculum_collaborators")
   authorOfAssignment       Assignment[]    @relation("Assignment_author")
+  authorOfResource         Resource[]      @relation("Resource_author")
   authorOfHomework         Homework[]      @relation("Homework_author")
   datasets                 Dataset[]       @relation("Dataset_profile")
   passwordResetToken       String?
@@ -99,6 +100,7 @@ model Class {
   talks       Talk[]         @relation("Class_talks")
   studies     Study[]        @relation("Class_studies")
   assignments Assignment[]   @relation("Assignment_classes")
+  resources   Resource[]     @relation("Class_resources")
 
   @@index([creatorId])
 }
@@ -467,6 +469,7 @@ model Tag {
   description String       @default("")
   lessons     Lesson[]     @relation("Lesson_tags")
   assignments Assignment[] @relation("Assignment_tags")
+  resources   Resource[]   @relation("Resource_tags")
   homeworks   Homework[]   @relation("Homework_tags")
   studies     Study[]      @relation("Study_tags")
   level       Int?
@@ -498,6 +501,25 @@ model Assignment {
   @@index([authorId])
 }
 
+model Resource {
+  id         String     @id @default(cuid())
+  code       String     @unique @default("")
+  author     Profile?   @relation("Resource_author", fields: [authorId], references: [id])
+  authorId   String?    @map("author")
+  classes    Class[]    @relation("Class_resources")
+  homework   Homework[] @relation("Homework_resources")
+  title      String     @default("")
+  content    String     @default("")
+  settings   Json?
+  public     Boolean    @default(false)
+  isTemplate Boolean    @default(false)
+  tags       Tag[]      @relation("Resource_tags")
+  createdAt  DateTime?  @default(now())
+  updatedAt  DateTime?
+
+  @@index([authorId])
+}
+
 model Homework {
   id           String      @id @default(cuid())
   code         String      @unique @default("")
@@ -505,6 +527,8 @@ model Homework {
   authorId     String?     @map("author")
   assignment   Assignment? @relation("Homework_assignment", fields: [assignmentId], references: [id])
   assignmentId String?     @map("assignment")
+  resources    Resource?   @relation("Homework_resources", fields: [resourcesId], references: [id])
+  resourcesId  String?     @map("resources")
   title        String      @default("")
   content      String      @default("")
   settings     Json?
@@ -515,6 +539,7 @@ model Homework {
 
   @@index([authorId])
   @@index([assignmentId])
+  @@index([resourcesId])
 }
 
 enum TaskTaskTypeType {

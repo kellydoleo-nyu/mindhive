@@ -11,7 +11,7 @@ import {
 } from "@keystone-6/core/fields";
 import uniqid from "uniqid";
 
-export const Homework = list({
+export const Resource = list({
   access: {
     operation: {
       query: () => true,
@@ -38,7 +38,7 @@ export const Homework = list({
       },
     }),
     author: relationship({
-      ref: "Profile.authorOfHomework",
+      ref: "Profile.authorOfResource",
       hooks: {
         async resolveInput({ context, operation, inputData }) {
           if (operation === "create") {
@@ -49,26 +49,26 @@ export const Homework = list({
         },
       },
     }),
-    assignment: relationship({
-      ref: "Assignment.homework",
+    classes: relationship({
+      ref: "Class.resources",
+      many: true,
     }),
-    resources: relationship({
-      ref: "Resource.homework",
+    homework: relationship({
+      ref: "Homework.resources",
+      many: true,
     }),
     title: text({ validation: { isRequired: true } }),
     content: text(),
     settings: json(),
     public: checkbox({ isFilterable: true }),
+    isTemplate: checkbox({ isFilterable: true }),
     tags: relationship({
-      ref: "Tag.homeworks",
+      ref: "Tag.resources",
       many: true,
     }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
     }),
     updatedAt: timestamp(),
-  },
-  graphql: {
-    plural: "homeworks",
   },
 });

@@ -79,6 +79,8 @@ type Profile {
   collaboratorInCurriculumCount(where: CurriculumWhereInput! = {}): Int
   authorOfAssignment(where: AssignmentWhereInput! = {}, orderBy: [AssignmentOrderByInput!]! = [], take: Int, skip: Int! = 0): [Assignment!]
   authorOfAssignmentCount(where: AssignmentWhereInput! = {}): Int
+  authorOfResource(where: ResourceWhereInput! = {}, orderBy: [ResourceOrderByInput!]! = [], take: Int, skip: Int! = 0): [Resource!]
+  authorOfResourceCount(where: ResourceWhereInput! = {}): Int
   authorOfHomework(where: HomeworkWhereInput! = {}, orderBy: [HomeworkOrderByInput!]! = [], take: Int, skip: Int! = 0): [Homework!]
   authorOfHomeworkCount(where: HomeworkWhereInput! = {}): Int
   datasets(where: DatasetWhereInput! = {}, orderBy: [DatasetOrderByInput!]! = [], take: Int, skip: Int! = 0): [Dataset!]
@@ -150,6 +152,7 @@ input ProfileWhereInput {
   authorOfCurriculum: CurriculumManyRelationFilter
   collaboratorInCurriculum: CurriculumManyRelationFilter
   authorOfAssignment: AssignmentManyRelationFilter
+  authorOfResource: ResourceManyRelationFilter
   authorOfHomework: HomeworkManyRelationFilter
   datasets: DatasetManyRelationFilter
   passwordResetToken: PasswordFilter
@@ -355,6 +358,12 @@ input AssignmentManyRelationFilter {
   none: AssignmentWhereInput
 }
 
+input ResourceManyRelationFilter {
+  every: ResourceWhereInput
+  some: ResourceWhereInput
+  none: ResourceWhereInput
+}
+
 input HomeworkManyRelationFilter {
   every: HomeworkWhereInput
   some: HomeworkWhereInput
@@ -444,6 +453,7 @@ input ProfileUpdateInput {
   authorOfCurriculum: CurriculumRelateToManyForUpdateInput
   collaboratorInCurriculum: CurriculumRelateToManyForUpdateInput
   authorOfAssignment: AssignmentRelateToManyForUpdateInput
+  authorOfResource: ResourceRelateToManyForUpdateInput
   authorOfHomework: HomeworkRelateToManyForUpdateInput
   datasets: DatasetRelateToManyForUpdateInput
   passwordResetToken: String
@@ -583,6 +593,13 @@ input AssignmentRelateToManyForUpdateInput {
   connect: [AssignmentWhereUniqueInput!]
 }
 
+input ResourceRelateToManyForUpdateInput {
+  disconnect: [ResourceWhereUniqueInput!]
+  set: [ResourceWhereUniqueInput!]
+  create: [ResourceCreateInput!]
+  connect: [ResourceWhereUniqueInput!]
+}
+
 input HomeworkRelateToManyForUpdateInput {
   disconnect: [HomeworkWhereUniqueInput!]
   set: [HomeworkWhereUniqueInput!]
@@ -650,6 +667,7 @@ input ProfileCreateInput {
   authorOfCurriculum: CurriculumRelateToManyForCreateInput
   collaboratorInCurriculum: CurriculumRelateToManyForCreateInput
   authorOfAssignment: AssignmentRelateToManyForCreateInput
+  authorOfResource: ResourceRelateToManyForCreateInput
   authorOfHomework: HomeworkRelateToManyForCreateInput
   datasets: DatasetRelateToManyForCreateInput
   passwordResetToken: String
@@ -750,6 +768,11 @@ input CurriculumRelateToManyForCreateInput {
 input AssignmentRelateToManyForCreateInput {
   create: [AssignmentCreateInput!]
   connect: [AssignmentWhereUniqueInput!]
+}
+
+input ResourceRelateToManyForCreateInput {
+  create: [ResourceCreateInput!]
+  connect: [ResourceWhereUniqueInput!]
 }
 
 input HomeworkRelateToManyForCreateInput {
@@ -951,6 +974,8 @@ type Class {
   studiesCount(where: StudyWhereInput! = {}): Int
   assignments(where: AssignmentWhereInput! = {}, orderBy: [AssignmentOrderByInput!]! = [], take: Int, skip: Int! = 0): [Assignment!]
   assignmentsCount(where: AssignmentWhereInput! = {}): Int
+  resources(where: ResourceWhereInput! = {}, orderBy: [ResourceOrderByInput!]! = [], take: Int, skip: Int! = 0): [Resource!]
+  resourcesCount(where: ResourceWhereInput! = {}): Int
 }
 
 input ClassWhereUniqueInput {
@@ -975,6 +1000,7 @@ input ClassWhereInput {
   talks: TalkManyRelationFilter
   studies: StudyManyRelationFilter
   assignments: AssignmentManyRelationFilter
+  resources: ResourceManyRelationFilter
 }
 
 input ClassOrderByInput {
@@ -1000,6 +1026,7 @@ input ClassUpdateInput {
   talks: TalkRelateToManyForUpdateInput
   studies: StudyRelateToManyForUpdateInput
   assignments: AssignmentRelateToManyForUpdateInput
+  resources: ResourceRelateToManyForUpdateInput
 }
 
 input ClassUpdateArgs {
@@ -1021,6 +1048,7 @@ input ClassCreateInput {
   talks: TalkRelateToManyForCreateInput
   studies: StudyRelateToManyForCreateInput
   assignments: AssignmentRelateToManyForCreateInput
+  resources: ResourceRelateToManyForCreateInput
 }
 
 type ClassNetwork {
@@ -2725,6 +2753,8 @@ type Tag {
   lessonsCount(where: LessonWhereInput! = {}): Int
   assignments(where: AssignmentWhereInput! = {}, orderBy: [AssignmentOrderByInput!]! = [], take: Int, skip: Int! = 0): [Assignment!]
   assignmentsCount(where: AssignmentWhereInput! = {}): Int
+  resources(where: ResourceWhereInput! = {}, orderBy: [ResourceOrderByInput!]! = [], take: Int, skip: Int! = 0): [Resource!]
+  resourcesCount(where: ResourceWhereInput! = {}): Int
   homeworks(where: HomeworkWhereInput! = {}, orderBy: [HomeworkOrderByInput!]! = [], take: Int, skip: Int! = 0): [Homework!]
   homeworksCount(where: HomeworkWhereInput! = {}): Int
   studies(where: StudyWhereInput! = {}, orderBy: [StudyOrderByInput!]! = [], take: Int, skip: Int! = 0): [Study!]
@@ -2752,6 +2782,7 @@ input TagWhereInput {
   description: StringFilter
   lessons: LessonManyRelationFilter
   assignments: AssignmentManyRelationFilter
+  resources: ResourceManyRelationFilter
   homeworks: HomeworkManyRelationFilter
   studies: StudyManyRelationFilter
   level: IntNullableFilter
@@ -2788,6 +2819,7 @@ input TagUpdateInput {
   description: String
   lessons: LessonRelateToManyForUpdateInput
   assignments: AssignmentRelateToManyForUpdateInput
+  resources: ResourceRelateToManyForUpdateInput
   homeworks: HomeworkRelateToManyForUpdateInput
   studies: StudyRelateToManyForUpdateInput
   level: Int
@@ -2814,6 +2846,7 @@ input TagCreateInput {
   description: String
   lessons: LessonRelateToManyForCreateInput
   assignments: AssignmentRelateToManyForCreateInput
+  resources: ResourceRelateToManyForCreateInput
   homeworks: HomeworkRelateToManyForCreateInput
   studies: StudyRelateToManyForCreateInput
   level: Int
@@ -2916,11 +2949,100 @@ input AssignmentCreateInput {
   updatedAt: DateTime
 }
 
+type Resource {
+  id: ID!
+  code: String
+  author: Profile
+  classes(where: ClassWhereInput! = {}, orderBy: [ClassOrderByInput!]! = [], take: Int, skip: Int! = 0): [Class!]
+  classesCount(where: ClassWhereInput! = {}): Int
+  homework(where: HomeworkWhereInput! = {}, orderBy: [HomeworkOrderByInput!]! = [], take: Int, skip: Int! = 0): [Homework!]
+  homeworkCount(where: HomeworkWhereInput! = {}): Int
+  title: String
+  content: String
+  settings: JSON
+  public: Boolean
+  isTemplate: Boolean
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ResourceWhereUniqueInput {
+  id: ID
+  code: String
+}
+
+input ResourceWhereInput {
+  AND: [ResourceWhereInput!]
+  OR: [ResourceWhereInput!]
+  NOT: [ResourceWhereInput!]
+  id: IDFilter
+  code: StringFilter
+  author: ProfileWhereInput
+  classes: ClassManyRelationFilter
+  homework: HomeworkManyRelationFilter
+  title: StringFilter
+  content: StringFilter
+  public: BooleanFilter
+  isTemplate: BooleanFilter
+  tags: TagManyRelationFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input ResourceOrderByInput {
+  id: OrderDirection
+  code: OrderDirection
+  title: OrderDirection
+  content: OrderDirection
+  public: OrderDirection
+  isTemplate: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input ResourceUpdateInput {
+  code: String
+  author: ProfileRelateToOneForUpdateInput
+  classes: ClassRelateToManyForUpdateInput
+  homework: HomeworkRelateToManyForUpdateInput
+  title: String
+  content: String
+  settings: JSON
+  public: Boolean
+  isTemplate: Boolean
+  tags: TagRelateToManyForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ResourceUpdateArgs {
+  where: ResourceWhereUniqueInput!
+  data: ResourceUpdateInput!
+}
+
+input ResourceCreateInput {
+  code: String
+  author: ProfileRelateToOneForCreateInput
+  classes: ClassRelateToManyForCreateInput
+  homework: HomeworkRelateToManyForCreateInput
+  title: String
+  content: String
+  settings: JSON
+  public: Boolean
+  isTemplate: Boolean
+  tags: TagRelateToManyForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 type Homework {
   id: ID!
   code: String
   author: Profile
   assignment: Assignment
+  resources: Resource
   title: String
   content: String
   settings: JSON
@@ -2944,6 +3066,7 @@ input HomeworkWhereInput {
   code: StringFilter
   author: ProfileWhereInput
   assignment: AssignmentWhereInput
+  resources: ResourceWhereInput
   title: StringFilter
   content: StringFilter
   public: BooleanFilter
@@ -2966,6 +3089,7 @@ input HomeworkUpdateInput {
   code: String
   author: ProfileRelateToOneForUpdateInput
   assignment: AssignmentRelateToOneForUpdateInput
+  resources: ResourceRelateToOneForUpdateInput
   title: String
   content: String
   settings: JSON
@@ -2981,6 +3105,12 @@ input AssignmentRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input ResourceRelateToOneForUpdateInput {
+  create: ResourceCreateInput
+  connect: ResourceWhereUniqueInput
+  disconnect: Boolean
+}
+
 input HomeworkUpdateArgs {
   where: HomeworkWhereUniqueInput!
   data: HomeworkUpdateInput!
@@ -2990,6 +3120,7 @@ input HomeworkCreateInput {
   code: String
   author: ProfileRelateToOneForCreateInput
   assignment: AssignmentRelateToOneForCreateInput
+  resources: ResourceRelateToOneForCreateInput
   title: String
   content: String
   settings: JSON
@@ -3002,6 +3133,11 @@ input HomeworkCreateInput {
 input AssignmentRelateToOneForCreateInput {
   create: AssignmentCreateInput
   connect: AssignmentWhereUniqueInput
+}
+
+input ResourceRelateToOneForCreateInput {
+  create: ResourceCreateInput
+  connect: ResourceWhereUniqueInput
 }
 
 """
@@ -3160,6 +3296,12 @@ type Mutation {
   updateAssignments(data: [AssignmentUpdateArgs!]!): [Assignment]
   deleteAssignment(where: AssignmentWhereUniqueInput!): Assignment
   deleteAssignments(where: [AssignmentWhereUniqueInput!]!): [Assignment]
+  createResource(data: ResourceCreateInput!): Resource
+  createResources(data: [ResourceCreateInput!]!): [Resource]
+  updateResource(where: ResourceWhereUniqueInput!, data: ResourceUpdateInput!): Resource
+  updateResources(data: [ResourceUpdateArgs!]!): [Resource]
+  deleteResource(where: ResourceWhereUniqueInput!): Resource
+  deleteResources(where: [ResourceWhereUniqueInput!]!): [Resource]
   createHomework(data: HomeworkCreateInput!): Homework
   createhomeworks(data: [HomeworkCreateInput!]!): [Homework]
   updateHomework(where: HomeworkWhereUniqueInput!, data: HomeworkUpdateInput!): Homework
@@ -3283,6 +3425,9 @@ type Query {
   assignments(where: AssignmentWhereInput! = {}, orderBy: [AssignmentOrderByInput!]! = [], take: Int, skip: Int! = 0): [Assignment!]
   assignment(where: AssignmentWhereUniqueInput!): Assignment
   assignmentsCount(where: AssignmentWhereInput! = {}): Int
+  resources(where: ResourceWhereInput! = {}, orderBy: [ResourceOrderByInput!]! = [], take: Int, skip: Int! = 0): [Resource!]
+  resource(where: ResourceWhereUniqueInput!): Resource
+  resourcesCount(where: ResourceWhereInput! = {}): Int
   homeworks(where: HomeworkWhereInput! = {}, orderBy: [HomeworkOrderByInput!]! = [], take: Int, skip: Int! = 0): [Homework!]
   homework(where: HomeworkWhereUniqueInput!): Homework
   homeworksCount(where: HomeworkWhereInput! = {}): Int

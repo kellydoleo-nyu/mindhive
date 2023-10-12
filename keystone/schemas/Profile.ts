@@ -256,6 +256,10 @@ export const Profile = list({
       ref: "Assignment.author",
       many: true,
     }),
+    authorOfResource: relationship({
+      ref: "Resource.author",
+      many: true,
+    }),
     authorOfHomework: relationship({
       ref: "Homework.author",
       many: true,

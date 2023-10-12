@@ -66,11 +66,20 @@ export const StyledDashboardContent = styled.div`
   .header {
     display: grid;
     grid-gap: 2rem;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     .idInfo {
       display: grid;
       grid-gap: 1rem;
     }
+  }
+
+  .modalWrapper {
+    padding: 35px;
+  }
+
+  .modelWrapper > label {
+    color: blue;
+
   }
 
   .code {
